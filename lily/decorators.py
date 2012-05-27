@@ -2,7 +2,7 @@
 
 from functools import wraps
 
-from velzno.http import JSONResponse
+from lily.http import JSONResponse
 
 def login_required_json(func):
     @wraps(func)

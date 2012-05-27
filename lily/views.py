@@ -9,7 +9,7 @@ from django.views.generic.edit import TemplateResponseMixin
 from django.views.generic.detail import BaseDetailView, SingleObjectMixin
 from django.views.generic.list import BaseListView
 
-# from velzno.decorators import login_required
+# from lily.decorators import login_required
 
 
 class View(_View):
