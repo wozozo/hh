@@ -20,6 +20,11 @@ class UserModelForm(forms.ModelForm):
 class UploadForm(forms.Form):
     photo = forms.ImageField()
 
+    def __init__(self, *args, **kwargs):
+        from .s3 import S3
+        self.s3 = S3()
+        super(UploadForm, self).__init__(*args, **kwargs)
+
     def clean_photo(self):
         photo = self.cleaned_data.get('photo')
         limit = 1000 * 1024 * 12 # 12MB

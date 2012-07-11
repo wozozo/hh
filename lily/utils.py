@@ -93,22 +93,3 @@ def splitquery(params):
         p = param.split(':')
         queries[p[0]] = [s for s in p[1].split('+') if s.strip() != '']
     return queries
-
-def store_in_s3(filename, content):
-    from django.conf import settings
-    from boto.s3.connection import S3Connection
-    from boto.s3.key import Key
-
-    conn = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
-    bucket = conn.lookup(settings.AWS_STORAGE_BUCKET_NAME)
-    # TODO guess ext
-    mime = mimetypes.guess_type(filename)[0]
-    k = Key(bucket)
-    k.key = filename
-    k.set_metadata("Content-Type", mime)
-    k.set_contents_from_file(content.file)
-    k.set_acl("public-read")
-
-    url = 'http://%s.s3.amazonaws.com/%s' % (settings.AWS_STORAGE_BUCKET_NAME, filename)
-
-    return url
