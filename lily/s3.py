@@ -35,9 +35,13 @@ class S3(object):
         mime = self.get_minetype(filename)
         metadata = {'Content-Type': mime}
 
+        self.key.key = filename
+
         if filename.startswith('tmp/'):
             filename = filename.lstrip('tmp/')
         date = '{year}{month:02d}{day:02d}'.format(year=date.year, month=date.month, day=date.day)
         dst_key = 'photos/{date}/{filename}'.format(date=date, filename=filename)
 
-        self.key.copy(self.key, dst_key, metadata=metadata, preserve_acl=True)
+        self.key.copy(self.bucket.name, dst_key, metadata=metadata)
+
+        return dst_key
