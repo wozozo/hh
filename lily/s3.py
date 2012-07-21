@@ -15,12 +15,12 @@ class S3(object):
         self.bucket = self.conn.lookup(settings.AWS_STORAGE_BUCKET_NAME)
         self.key = Key(self.bucket)
 
-    def get_minetype(self, filename):
+    def get_mimetype(self, filename):
         return mimetypes.guess_type(filename)[0]
 
     def store(self, filename, content):
         # TODO guess ext
-        mime = self.get_minetype(filename)
+        mime = self.get_mimetype(filename)
         self.key.key = filename
         self.key.set_metadata("Content-Type", mime)
         self.key.set_contents_from_file(content.file)
@@ -32,7 +32,7 @@ class S3(object):
         return url
 
     def publish(self, filename, date):
-        mime = self.get_minetype(filename)
+        mime = self.get_mimetype(filename)
         metadata = {'Content-Type': mime}
 
         self.key.key = filename
