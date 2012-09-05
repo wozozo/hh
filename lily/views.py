@@ -31,7 +31,7 @@ class JSONResponseMixin(object):
     def success(self, context=None):
         success = {'code': 'SUCCESS'}
         if context:
-            success['data'] = context
+            success.update(context)
         return self.render_to_response(success)
 
     def fail(self, context, data=None):

@@ -42,6 +42,6 @@ class S3(object):
         date = '{year}{month:02d}{day:02d}'.format(year=date.year, month=date.month, day=date.day)
         dst_key = 'photos/{date}/{filename}'.format(date=date, filename=filename)
 
-        self.key.copy(self.bucket.name, dst_key, metadata=metadata)
+        self.key.copy(self.bucket.name, dst_key, metadata=metadata, preserve_acl=True)
 
         return dst_key
