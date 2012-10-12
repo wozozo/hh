@@ -13,12 +13,15 @@ class BaseUserCreationForm(forms.ModelForm):
         'password_mismatch': '確認用パスワードが一致しません。',
         'duplicate_email': 'このメールアドレスは既に登録されています。'
     }
-    username = forms.RegexField(label="ユーザー名", max_length=30,
+    username = forms.RegexField(label=_("Username"), max_length=30,
         regex=r'^[\w]+$',
         help_text = "この項目は必須です。半角アルファベット、半角数字、"
                     "アンダースコアのみで30文字以下にしてください。",
         error_messages = {
             'invalid': "半角の英数字およびアンダースコア以外は使用できません。"})
+    email = forms.EmailField(label=_("Email"), max_length=255,
+        error_messages = {
+            'invalid': "正しいメールアドレスを入力してください。"})
     password1 = forms.CharField(label=_("Password"),
         widget=forms.PasswordInput)
     password2 = forms.CharField(label=_("Password confirmation"),
