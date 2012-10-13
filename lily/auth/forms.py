@@ -1,7 +1,8 @@
 # coding: utf-8
 
 from django import forms
-from django.contrib.auth import authenticate
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.utils.translation import ugettext_lazy as _
 
 from models import BaseUser
@@ -9,10 +10,11 @@ from models import BaseUser
 
 class BaseUserCreationForm(forms.ModelForm):
     error_messages = {
-        'duplicate_username': 'このユーザー名は既に登録されています。',
-        'password_mismatch': '確認用パスワードが一致しません。',
+        'duplicate_username': _("A user with that username already exists."),
+        'password_mismatch': _("The two password fields didn't match."),
         'duplicate_email': 'このメールアドレスは既に登録されています。'
     }
+
     username = forms.RegexField(label=_("Username"), max_length=30,
         regex=r'^[\w]+$',
         help_text = "この項目は必須です。半角アルファベット、半角数字、"
@@ -109,3 +111,8 @@ class BaseAuthenticationForm(forms.Form):
 
     def get_user(self):
         return self.user_cache
+
+    def login(self, request, user):
+        login(request, user)
+        messages.success(request, "Successfullylogged in as %(username)s." % {'username': user.username})
+        request.session.set_expiry(60 * 60 * 24 * 14)
