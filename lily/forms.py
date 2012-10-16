@@ -20,14 +20,15 @@ class UserModelForm(forms.ModelForm):
 class UploadForm(forms.Form):
     photo = forms.ImageField()
 
-    def __init__(self, *args, **kwargs):
+    # Unit of `limit` is MB (default 12MB)
+    def __init__(self, limit=12, *args, **kwargs):
+        self.limit = 1000 * 1024 * limit
         from .s3 import S3
         self.s3 = S3()
         super(UploadForm, self).__init__(*args, **kwargs)
 
     def clean_photo(self):
         photo = self.cleaned_data.get('photo')
-        limit = 1000 * 1024 * 12 # 12MB
-        if photo.size > limit:
-            raise forms.ValidationError(u'写真のサイズは10MBまでです。')
+        if photo.size > self.limit:
+            raise forms.ValidationError('写真のサイズは %sMB までです。' % self.limit)
         return self.cleaned_data['photo']
