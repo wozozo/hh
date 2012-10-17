@@ -17,6 +17,7 @@ def _sha1(chars):
 
 sets = string.digits + string.letters
 def random_string(n, sets=sets):
+    sets = sets if sets else string.digits + string.letters
     random.seed()
     return ''.join(random.choice(sets) for i in range(n))
 
