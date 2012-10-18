@@ -115,4 +115,4 @@ class BaseAuthenticationForm(forms.Form):
     def login(self, request, user):
         login(request, user)
         messages.success(request, "Successfullylogged in as %(username)s." % {'username': user.username})
-        request.session.set_expiry(60 * 60 * 24 * 14)
+        request.session.set_expiry(60 * 60 * 24 * 14)  # 2 weeks
