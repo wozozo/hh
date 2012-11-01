@@ -14,8 +14,9 @@ class UserForm(forms.Form):
 
 class UserModelForm(forms.ModelForm):
 
-    def __init__(self, user=None, *args, **kwargs):
-        self.user = user
+    def __init__(self, *args, **kwargs):
+        if kwargs.has_key('initial') and kwargs['initial'].get('user'):
+            self.user = kwargs['initial']['user']
         super(UserModelForm, self).__init__(*args, **kwargs)
 
 
