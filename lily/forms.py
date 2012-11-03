@@ -2,6 +2,7 @@
 
 from django import forms
 
+from s3 import S3
 from utils.text import timebased_rename
 
 
@@ -20,7 +21,14 @@ class UserModelForm(forms.ModelForm):
         super(UserModelForm, self).__init__(*args, **kwargs)
 
 
-class UploadForm(forms.Form):
+class S3Form(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        self.s3 = S3()
+        super(S3Form, self).__init__(*args, **kwargs)
+
+
+class UploadForm(S3Form):
     photo = forms.ImageField()
 
     def __init__(self, *args, **kwargs):
@@ -33,8 +41,6 @@ class UploadForm(forms.Form):
 
         self.limit = 1000 * 1024 * limit
 
-        from .s3 import S3
-        self.s3 = S3()
         super(UploadForm, self).__init__(*args, **kwargs)
 
     def clean_photo(self):
@@ -51,4 +57,5 @@ class UploadForm(forms.Form):
 
         dataset = {'url': url, 'filename': filename, 'filepath': filepath}
         return dataset
+
 
