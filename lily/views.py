@@ -80,3 +80,12 @@ class JSONDetailView(JSONResponseMixin, BaseDetailView):
         except ObjectDoesNotExist:
             pass
         super(JSONDetailView, self).get_object(queryset)
+
+
+class AssignUserView(object):
+
+    def get_initial(self):
+        initial = super(AssignUserView, self).get_initial()
+        # Copy the dictionary so we don't accidentally change a mutable dict
+        initial = initial.copy()
+        initial['user'] = self.request.user
