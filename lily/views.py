@@ -1,7 +1,8 @@
 # coding: utf-8
 
+import json
+
 from django import http
-from django.utils import simplejson as json
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import View as _View
@@ -9,7 +10,8 @@ from django.views.generic.edit import TemplateResponseMixin
 from django.views.generic.detail import BaseDetailView, SingleObjectMixin
 from django.views.generic.list import BaseListView
 
-# from lily.decorators import login_required
+from lily.decorators import login_required_json
+from lily.http import DjangoJSONEncoder
 
 
 class View(_View):
@@ -28,13 +30,13 @@ class JSONResponseMixin(object):
     """
     ref. https://docs.djangoproject.com/en/1.3/topics/class-based-views/#more-than-just-html
     """
-    def success(self, context=None):
+    def render_success(self, context=None):
         success = {'code': 'SUCCESS'}
         if context:
             success.update(context)
         return self.render_to_response(success)
 
-    def fail(self, context, data=None):
+    def render_fail(self, context, data=None):
         if data:
             context.update(data)
         return self.render_to_response(context)
@@ -55,7 +57,7 @@ class JSONResponseMixin(object):
         # to do much more complex handling to ensure that arbitrary
         # objects -- such as Django model instances or querysets
         # -- can be serialized as JSON.
-        return json.dumps(context)
+        return json.dumps(context, cls=DjangoJSONEncoder)
 
 
 class JSONView(JSONResponseMixin, SingleObjectMixin, View):

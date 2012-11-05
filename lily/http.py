@@ -1,8 +1,18 @@
 # coding: utf-8
 
-from django.core.serializers.json import DjangoJSONEncoder
+import json
+
+from django.core.serializers.json import DjangoJSONEncoder as _DjangoJSONEncoder
 from django.http import HttpResponse
-from django.utils import simplejson as json
+
+
+class DjangoJSONEncoder(_DjangoJSONEncoder):
+
+    DATE_FORMAT = "%Y-%m-%d"
+    TIME_FORMAT = "%H:%M:%S"
+
+    def default(self, o):
+        return super(DjangoJSONEncoder, self).default(o)
 
 
 class JSONResponse(HttpResponse):
