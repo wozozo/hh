@@ -91,3 +91,21 @@ class AssignUserView(object):
         # Copy the dictionary so we don't accidentally change a mutable dict
         initial = initial.copy()
         initial['user'] = self.request.user
+
+
+class LoginRequiredJSONMixin(object):
+    """
+    View mixin which verifies that the user has authenticated.
+
+    NOTE:
+        This should be the left-most mixin of a view.
+
+    NOTE:
+        Based on django-braces.views.LoginRequiredMixin
+
+    """
+
+    @method_decorator(login_required_json)
+    def dispatch(self, *args, **kwargs):
+        return super(LoginRequiredJSONMixin, self).dispatch(*args, **kwargs)
+
