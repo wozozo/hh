@@ -58,4 +58,3 @@ class UploadForm(S3Form):
         dataset = {'url': url, 'filename': filename, 'filepath': filepath}
         return dataset
 
-
