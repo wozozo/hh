@@ -1,6 +1,7 @@
 # coding: utf-8
 
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 
 from s3 import S3
 from utils.text import timebased_rename
@@ -58,3 +59,38 @@ class UploadForm(S3Form):
         dataset = {'url': url, 'filename': filename, 'filepath': filepath}
         return dataset
 
+
+class PasswordForm(UserModelForm):
+
+    password1 = forms.CharField(min_length=4, label=_('New password'),
+            widget=forms.PasswordInput(render_value=False,
+                attrs={'size': 40, 'maxlength': 16, 'autocomplete': 'off',
+                    'class': 'inputtext'}))
+    password2 = forms.CharField(min_length=4, label=_('Password confirmation'),
+            widget=forms.PasswordInput(render_value=False,
+                attrs={'size': 40, 'maxlength': 16, 'autocomplete': 'off',
+                    'class': 'inputtext'}))
+
+    def __init__(self, *args, **kwargs):
+        super(PasswordForm, self).__init__(*args, **kwargs)
+
+        self.fields['password'].widget = forms.PasswordInput(
+            attrs={'size': 40, 'maxlength': 16, 'class': 'inputtext'})
+
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        if not self.user.check_password(password):
+            raise forms.ValidationError('現在のパスワードが違います')
+        return password
+
+    def clean_password2(self):
+        password1 = self.cleaned_data['password1']
+        password2 = self.cleaned_data['password2']
+
+        if password1 != password2:
+            raise forms.ValidationError('新しいパスワードが一致しません')
+        return password2
+
+    def save(self, **kwargs):
+        self.user.set_password(self.cleaned_data['password1'])
+        super(PasswordForm, self).save()
