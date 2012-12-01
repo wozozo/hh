@@ -12,7 +12,7 @@ class S3(object):
 
     def __init__(self, **kwargs):
         if not 'host' in kwargs:
-            kwargs['host'] = 's3-ap-northeast-1.amazonaws.com'
+            kwargs['host'] = 's3-ap-northeast-1.amazonaws.com'  # Tokyo region
         self.conn = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY, **kwargs)
         self.bucket = self.conn.lookup(settings.AWS_STORAGE_BUCKET_NAME)
         self.key = Key(self.bucket)
