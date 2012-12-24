@@ -84,6 +84,17 @@ class JSONDetailView(JSONResponseMixin, BaseDetailView):
         super(JSONDetailView, self).get_object(queryset)
 
 
+class PlayerTemplateResponseMixin(TemplateResponseMixin):
+
+    def render_to_response(self, context, **response_kwargs):
+        if 'cast' in context and context['cast'] == self.request.user:
+            context['player'] = True
+        else:
+            context['player'] = False
+
+        return super(PlayerTemplateResponseMixin, self).render_to_response(context, **response_kwargs)
+
+
 class AssignUserView(object):
 
     def get_initial(self):
