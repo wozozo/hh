@@ -1,5 +1,6 @@
 # coding: utf-8
 
+import logging
 import mimetypes
 
 from django.conf import settings
@@ -47,3 +48,8 @@ class S3(object):
         self.key.copy(self.bucket.name, dst_key, metadata=metadata, preserve_acl=True)
 
         return dst_key
+
+    def delete(self, filename):
+        # TODO s3.delete
+        logging.warning('"S3.deleted" is not implemented.')
+
