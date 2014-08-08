@@ -8,10 +8,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import View as _View
 from django.views.generic.edit import TemplateResponseMixin
 from django.views.generic.detail import BaseDetailView, SingleObjectMixin
-from django.views.generic.list import BaseListView
 
-from lily.decorators import login_required_json
-from lily.http import DjangoJSONEncoder
+from decorators import login_required_json
+from http import DjangoJSONEncoder
 
 
 class View(_View):
